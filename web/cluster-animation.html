@@ -228,7 +228,7 @@
         
         <div id="info-panel">
             <h1>🏛️ Gerrard Hall</h1>
-            <div class="subtitle">Hierarchical Cluster Reconstruction</div>
+            <div class="subtitle">GTSFM Global Structure-from-Motion</div>
             <div class="info-item">
                 <span class="info-label">Active Clusters:</span>
                 <span class="info-value" id="active-clusters">0</span>
@@ -238,34 +238,41 @@
                 <span class="info-value" id="point-count">0</span>
             </div>
             <div class="info-item">
-                <span class="info-label">Merge Stage:</span>
-                <span class="info-value" id="merge-stage">Initial</span>
+                <span class="info-label">Progress:</span>
+                <span class="info-value" id="merge-stage">0%</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Dataset:</span>
+                <span class="info-value">100 images, 98 cams</span>
             </div>
             <div class="instructions">
-                <p><strong>Visualization:</strong></p>
-                <p>🔴 Watch clusters repulse & merge</p>
-                <p>🎬 Use timeline to control animation</p>
+                <p><strong>About:</strong></p>
+                <p>Clusters = camera viewpoint groups</p>
+                <p>Animation shows GTSFM pipeline stages</p>
+                <p style="margin-top:10px"><strong>Reference:</strong></p>
+                <p style="font-size:11px; line-height:1.4">Baid et al., "Distributed Global Structure-from-Motion with a Deep Front-End"</p>
+                <p style="margin-top:10px"><strong>Controls:</strong></p>
                 <p>🖱️ Drag to rotate, scroll to zoom</p>
             </div>
         </div>
 
         <div class="cluster-legend">
-            <div class="legend-title">Cluster Colors</div>
+            <div class="legend-title">Viewpoint Clusters</div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ff5252;"></div>
-                <span>Cluster 1</span>
+                <span>C1: Front View</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #4caf50;"></div>
-                <span>Cluster 2</span>
+                <span>C2: Right Side</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #2196f3;"></div>
-                <span>Cluster 3</span>
+                <span>C3: Back View</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ffeb3b;"></div>
-                <span>Cluster 4</span>
+                <span>C4: Left/Roof</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #9c27b0;"></div>
@@ -273,7 +280,7 @@
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #00bcd4;"></div>
-                <span>Merged</span>
+                <span>Final (98 cams)</span>
             </div>
         </div>
 
@@ -306,26 +313,28 @@
         let animationId = null;
 
         // Define cluster hierarchy and colors
+        // Clusters represent camera viewpoint groups capturing different parts of Gerrard Hall
+        // Based on GTSFM paper: Baid et al., "Distributed Global Structure-from-Motion with a Deep Front-End"
         const clusterHierarchy = [
-            { path: 'C_1/merged', color: 0xff5252, name: 'Cluster 1', parent: null },
-            { path: 'C_2/merged', color: 0x4caf50, name: 'Cluster 2', parent: null },
-            { path: 'C_3/merged', color: 0x2196f3, name: 'Cluster 3', parent: null },
-            { path: 'C_4/merged', color: 0xffeb3b, name: 'Cluster 4', parent: null },
-            { path: 'C_1/C_1_1/merged', color: 0x9c27b0, name: 'Cluster 1.1', parent: 'C_1' },
-            { path: 'C_1/C_1_2/merged', color: 0xe91e63, name: 'Cluster 1.2', parent: 'C_1' },
-            { path: 'C_4/C_4_1/merged', color: 0xff9800, name: 'Cluster 4.1', parent: 'C_4' },
-            { path: 'C_4/C_4_2/merged', color: 0x795548, name: 'Cluster 4.2', parent: 'C_4' },
-            { path: 'merged', color: 0x00bcd4, name: 'Final Merged', parent: 'all' }
+            { path: 'C_1/merged', color: 0xff5252, name: 'Cluster 1 (Front)', parent: null, viewAngle: 0 },
+            { path: 'C_2/merged', color: 0x4caf50, name: 'Cluster 2 (Right)', parent: null, viewAngle: 90 },
+            { path: 'C_3/merged', color: 0x2196f3, name: 'Cluster 3 (Back)', parent: null, viewAngle: 180 },
+            { path: 'C_4/merged', color: 0xffeb3b, name: 'Cluster 4 (Left)', parent: null, viewAngle: 270 },
+            { path: 'C_1/C_1_1/merged', color: 0x9c27b0, name: 'Sub-cluster 1.1', parent: 'C_1', viewAngle: 30 },
+            { path: 'C_1/C_1_2/merged', color: 0xe91e63, name: 'Sub-cluster 1.2', parent: 'C_1', viewAngle: -30 },
+            { path: 'C_4/C_4_1/merged', color: 0xff9800, name: 'Sub-cluster 4.1', parent: 'C_4', viewAngle: 240 },
+            { path: 'C_4/C_4_2/merged', color: 0x795548, name: 'Sub-cluster 4.2', parent: 'C_4', viewAngle: 300 },
+            { path: 'merged', color: 0x00bcd4, name: 'Final Merged (98 cams)', parent: 'all', viewAngle: 0 }
         ];
 
-        // Animation stages
+        // Animation stages matching GTSFM pipeline (Baid et al.)
         const stages = [
-            { time: 0, description: 'Stage 0: Individual Clusters (Repulsed)', clusters: [0,1,2,3] },
-            { time: 20, description: 'Stage 1: Sub-clusters Emerging', clusters: [0,1,2,3,4,5,6,7] },
-            { time: 40, description: 'Stage 2: Local Cluster Merging', clusters: [0,1,2,3] },
-            { time: 60, description: 'Stage 3: Global Alignment', clusters: [0,1,2,3] },
-            { time: 80, description: 'Stage 4: Progressive Merging', clusters: [8] },
-            { time: 100, description: 'Stage 5: Final Reconstruction Complete', clusters: [8] }
+            { time: 0, description: 'Stage 0: Image Matching & View Graph (4 viewpoint clusters)', clusters: [0,1,2,3] },
+            { time: 20, description: 'Stage 1: Hierarchical Subdivision (8 sub-clusters)', clusters: [0,1,2,3,4,5,6,7] },
+            { time: 40, description: 'Stage 2: Rotation Averaging (aligning coordinate frames)', clusters: [0,1,2,3] },
+            { time: 60, description: 'Stage 3: Translation Averaging (positioning clusters)', clusters: [0,1,2,3] },
+            { time: 80, description: 'Stage 4: Bundle Adjustment (joint optimization)', clusters: [8] },
+            { time: 100, description: 'Stage 5: Final - 98/100 cameras, 10.7K tracks, 0.8px error', clusters: [8] }
         ];
 
         function init() {
@@ -496,16 +505,17 @@
                     group.visible = true;
                     activeClusters++;
                     
-                    // Repulsion phase (0-40)
+                    // Repulsion phase (0-40) - Position by viewing angle
                     if (time < 40) {
-                        const angle = (index / clusterGroups.length) * Math.PI * 2;
+                        // Use actual viewing angle from cluster definition (represents camera viewpoint)
+                        const viewAngle = (cluster.viewAngle || (index * 45)) * Math.PI / 180;
                         const distance = repulsionStrength;
-                        group.position.x = Math.cos(angle) * distance;
-                        group.position.z = Math.sin(angle) * distance;
-                        group.position.y = Math.sin(time * 0.05 + index) * 0.5;
+                        group.position.x = Math.cos(viewAngle) * distance;
+                        group.position.z = Math.sin(viewAngle) * distance;
+                        group.position.y = Math.sin(time * 0.05 + index) * 0.3;
                         
-                        // Rotate clusters during repulsion
-                        group.rotation.y = time * 0.02;
+                        // Rotate clusters to face center during repulsion
+                        group.rotation.y = viewAngle + Math.PI + (time * 0.01);
                         
                         group.children[0].material.opacity = 0.9;
                         group.children[0].material.size = 0.03;
