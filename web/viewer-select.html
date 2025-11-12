@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerrard Hall - Visualization Selector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+        .viewer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .viewer-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .viewer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        .viewer-icon {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .viewer-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .viewer-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .viewer-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        .viewer-features li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #eee;
+        }
+        .viewer-features li:last-child {
+            border-bottom: none;
+        }
+        .viewer-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .viewer-card:hover .viewer-button {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge-new {
+            background: #4caf50;
+            color: white;
+        }
+        .badge-popular {
+            background: #ff9800;
+            color: white;
+        }
+        .badge-frank {
+            background: #2196f3;
+            color: white;
+        }
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 40px;
+        }
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ Gerrard Hall Visualizations</h1>
+        <div class="subtitle">
+            Choose your visualization experience - Three different ways to explore the GTSFM reconstruction
+        </div>
+
+        <div class="viewer-grid">
+            <!-- Static Viewer -->
+            <a href="index.html" class="viewer-card">
+                <div class="viewer-icon">📊</div>
+                <div class="viewer-title">
+                    Static Viewer
+                    <span class="badge badge-popular">POPULAR</span>
+                </div>
+                <div class="viewer-description">
+                    Explore individual reconstructions and compare different stages of the pipeline.
+                </div>
+                <ul class="viewer-features">
+                    <li>✓ Switch between clusters</li>
+                    <li>✓ View BA stages (input/output/GT)</li>
+                    <li>✓ Camera frustum visualization</li>
+                    <li>✓ Point size controls</li>
+                </ul>
+                <div class="viewer-button">Open Static Viewer →</div>
+            </a>
+
+            <!-- Cluster Animation -->
+            <a href="cluster-animation.html" class="viewer-card">
+                <div class="viewer-icon">🎬</div>
+                <div class="viewer-title">
+                    Cluster Animation
+                    <span class="badge badge-popular">DEMO-READY</span>
+                </div>
+                <div class="viewer-description">
+                    Watch clusters merge over time in a cinematic animation inspired by "Building Rome in a Day".
+                </div>
+                <ul class="viewer-features">
+                    <li>✓ Animated cluster merging</li>
+                    <li>✓ GTSFM pipeline stages</li>
+                    <li>✓ Viewpoint-based clustering</li>
+                    <li>✓ Auto-play animation</li>
+                </ul>
+                <div class="viewer-button">Launch Animation →</div>
+            </a>
+
+            <!-- Merge Tree -->
+            <a href="merge-tree.html" class="viewer-card">
+                <div class="viewer-icon">🌳</div>
+                <div class="viewer-title">
+                    Merge Tree
+                    <span class="badge badge-frank">FRANK'S VERSION</span>
+                </div>
+                <div class="viewer-description">
+                    Literal visualization of the hierarchical merge tree - see exactly how clusters combine.
+                </div>
+                <ul class="viewer-features">
+                    <li>✓ Tree structure sidebar</li>
+                    <li>✓ Show/hide based on merges</li>
+                    <li>✓ Step-by-step events</li>
+                    <li>✓ 38+ reconstructions</li>
+                </ul>
+                <div class="viewer-button">View Merge Tree →</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>
+                <strong>Dataset:</strong> Gerrard Hall, UNC Chapel Hill (100 images, 98 cameras, 23,841 points)<br>
+                <strong>Pipeline:</strong> GTSFM - Georgia Tech Structure-from-Motion<br>
+                <strong>Reference:</strong> Baid et al., "Distributed Global Structure-from-Motion with a Deep Front-End"<br>
+                <a href="https://github.com/nilakarthikesan/gerrard-hall-v2" target="_blank">View on GitHub</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

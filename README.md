@@ -44,10 +44,42 @@ This interactive visualization demonstrates the hierarchical cluster merging pro
    ```
 
 3. **Open in your browser:**
+   - **Viewer Selector:** http://localhost:8000/web/viewer-select.html (choose your visualization)
    - **Cluster Animation:** http://localhost:8000/web/cluster-animation.html
+   - **Merge Tree:** http://localhost:8000/web/merge-tree.html (Frank's literal tree version)
    - **Static Viewer:** http://localhost:8000/web/index.html
 
+### Three Visualization Options
+
+#### 1. **Merge Tree Visualization** (Frank's Literal Version)
+Shows the exact hierarchical merge process - reconstructions appear and disappear as they merge.
+- Tree structure sidebar shows all 38+ reconstructions
+- Timeline events: each step shows/hides specific clusters
+- No spatial movement - pure visibility toggling
+- Perfect for understanding the actual GTSFM merge algorithm
+
+#### 2. **Cluster Animation** (Cinematic Demo Version)
+Artistic animation showing viewpoint clusters merging over time.
+- Inspired by "Building Rome in a Day" visualization
+- Clusters positioned by viewing angle (front, side, back, roof)
+- Smooth animations with rotation and merging
+- Great for presentations and demos
+
+#### 3. **Static Viewer** (Comparison Tool)
+Traditional point cloud viewer for exploring individual reconstructions.
+- Switch between any cluster or reconstruction stage
+- Compare BA input vs output vs ground truth
+- Point size controls and camera frustums
+- Best for detailed analysis
+
 ### Usage Instructions
+
+#### **Merge Tree (Frank's Version)**
+- **Timeline Slider:** Step through merge events
+- **Step Buttons:** Move forward/backward one event at a time
+- **Play Button:** Auto-animate the merge sequence
+- **Tree Panel:** See which reconstructions are currently visible
+- Watch as child reconstructions disappear when parent merges appear
 
 #### **Cluster Animation (Recommended for Demos)**
 - **Timeline Slider:** Scrub through the reconstruction process (0-100%)
