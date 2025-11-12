@@ -1,0 +1,65 @@
+{
+    "view_graph_estimation_metrics": {
+        "num_input_measurements": 1.0,
+        "num_inlier_measurements": 1.0,
+        "num_outlier_measurements": 0.0,
+        "R_precision": 0.0,
+        "R_recall": 0.0,
+        "U_precision": 0.0,
+        "U_recall": 0.0,
+        "inlier_R_angular_errors_deg": {
+            "summary": {
+                "min": 100.11673308996025,
+                "max": 100.11673308996025,
+                "median": 100.11673308996025,
+                "mean": 100.11673308996025,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 100.11673308996025,
+                    "q1": 100.11673308996025,
+                    "q2": 100.11673308996025,
+                    "q3": 100.11673308996025,
+                    "q4": 100.11673308996025
+                }
+            }
+        },
+        "outlier_R_angular_errors_deg": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        },
+        "inlier_U_angular_errors_deg": {
+            "summary": {
+                "min": 99.86127105643885,
+                "max": 99.86127105643885,
+                "median": 99.86127105643885,
+                "mean": 99.86127105643885,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 99.86127105643885,
+                    "q1": 99.86127105643885,
+                    "q2": 99.86127105643885,
+                    "q3": 99.86127105643885,
+                    "q4": 99.86127105643885
+                }
+            }
+        },
+        "outlier_U_angular_errors_deg": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        }
+    }
+}

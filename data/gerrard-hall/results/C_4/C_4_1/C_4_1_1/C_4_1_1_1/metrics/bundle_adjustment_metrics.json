@@ -1,0 +1,175 @@
+{
+    "bundle_adjustment_metrics": {
+        "number_cameras": 6.0,
+        "number_tracks_unfiltered": 2150.0,
+        "3d_track_lengths_unfiltered": {
+            "summary": {
+                "min": 3,
+                "max": 6,
+                "median": 4.0,
+                "mean": 4.129302325581396,
+                "stddev": 1.0138698493346867,
+                "len": 2150,
+                "invalid": 0,
+                "histogram": {
+                    "3": 636,
+                    "4": 530,
+                    "5": 244
+                }
+            }
+        },
+        "reprojection_errors_unfiltered_px": {
+            "summary": {
+                "min": 0.009550190919864084,
+                "max": 8.536813719629023,
+                "median": 0.47719700818540906,
+                "mean": 0.6171664812973547,
+                "stddev": 0.6186475653116978,
+                "len": 8878,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.009550190919864084,
+                    "q1": 0.29546336567338144,
+                    "q2": 0.47719700818540906,
+                    "q3": 0.7284568023700644,
+                    "q4": 8.536813719629023
+                }
+            }
+        },
+        "rotation_angle_error_deg": {
+            "summary": {
+                "min": 0.005347563419491053,
+                "max": 0.04073874652385712,
+                "median": 0.014124126173555851,
+                "mean": 0.01867801323533058,
+                "stddev": 0.013363889418542385,
+                "len": 100,
+                "invalid": 94,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "translation_error_distance": {
+            "summary": {
+                "min": 0.00034900318132713437,
+                "max": 0.0011057484662160277,
+                "median": 0.00044769185478799045,
+                "mean": 0.0006232424057088792,
+                "stddev": 0.00032593717332929373,
+                "len": 100,
+                "invalid": 94,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "relative_translation_angle_error_deg": {
+            "summary": {
+                "min": 0.007565724663436413,
+                "max": 0.17425020039081573,
+                "median": 0.09066677838563919,
+                "mean": 0.0855649933218956,
+                "stddev": 0.05130639672279358,
+                "len": 15,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.007565724663436413,
+                    "q1": 0.05045664869248867,
+                    "q2": 0.09066677838563919,
+                    "q3": 0.11800215020775795,
+                    "q4": 0.17425020039081573
+                }
+            }
+        },
+        "translation_angle_error_deg": {
+            "summary": {
+                "min": 0.0014165466418489814,
+                "max": 0.015461678616702557,
+                "median": 0.00261284364387393,
+                "mean": 0.005116355139762163,
+                "stddev": 0.004978128243237734,
+                "len": 100,
+                "invalid": 94,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "relative_rotation_angle_error_deg": {
+            "summary": {
+                "min": 0.01069512777030468,
+                "max": 0.06386158615350723,
+                "median": 0.031247040256857872,
+                "mean": 0.030900966376066208,
+                "stddev": 0.015063459984958172,
+                "len": 15,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.01069512777030468,
+                    "q1": 0.01615061704069376,
+                    "q2": 0.031247040256857872,
+                    "q3": 0.040866127237677574,
+                    "q4": 0.06386158615350723
+                }
+            }
+        },
+        "pose_auc_@1.0_deg": 0.918768584728241,
+        "pose_auc_@2.5_deg": 0.9675074219703674,
+        "pose_auc_@5.0_deg": 0.9837537407875061,
+        "pose_auc_@10.0_deg": 0.9918768405914307,
+        "pose_auc_@20.0_deg": 0.9959384202957153,
+        "Filtered tracks triangulated with GT cams: SUCCESS": 2023.0,
+        "number_tracks_filtered": 2023.0,
+        "3d_track_lengths_filtered": {
+            "summary": {
+                "min": 3,
+                "max": 6,
+                "median": 4.0,
+                "mean": 4.111220958971824,
+                "stddev": 1.0125205512231366,
+                "len": 2023,
+                "invalid": 0,
+                "histogram": {
+                    "3": 590,
+                    "4": 496,
+                    "5": 222
+                }
+            }
+        },
+        "reprojection_errors_filtered_px": {
+            "summary": {
+                "min": 0.009550190920242223,
+                "max": 2.9983384606909578,
+                "median": 0.465674321508048,
+                "mean": 0.5526432313881843,
+                "stddev": 0.4090253489934846,
+                "len": 8317,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.009550190920242223,
+                    "q1": 0.28803774312747943,
+                    "q2": 0.465674321508048,
+                    "q3": 0.7014520977092016,
+                    "q4": 2.9983384606909578
+                }
+            }
+        },
+        "step_0_run_duration_sec": 0.8837752342224121,
+        "step_1_run_duration_sec": 0.8460023403167725,
+        "step_2_run_duration_sec": 0.9398338794708252,
+        "total_run_duration_sec": 2.670241594314575
+    }
+}

@@ -1,0 +1,114 @@
+{
+    "translation_averaging_metrics": {
+        "num_total_1dsfm_measurements": 9121.0,
+        "num_camera_1dsfm_measurements": 16.0,
+        "num_track_1dsfm_measurements": 9105.0,
+        "num_translations_estimated": 10.0,
+        "inlier_relative_translation_angle_error_deg": {
+            "summary": {
+                "min": 0.0,
+                "max": 1.7075473124350538e-06,
+                "median": 4.2688682810876344e-07,
+                "mean": 5.023504741075158e-07,
+                "stddev": 5.425321205621003e-07,
+                "len": 16,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.0,
+                    "q1": 0.0,
+                    "q2": 4.2688682810876344e-07,
+                    "q3": 8.537736562175269e-07,
+                    "q4": 1.7075473124350538e-06
+                }
+            }
+        },
+        "num_inlier_1dsfm_measurements": 16.0,
+        "num_outlier_1dsfm_measurements": 0.0,
+        "1dsfm_precision_5_deg": 1.0,
+        "1dsfm_recall_5_deg": 1.0,
+        "1dsfm_inlier_angular_errors_deg": {
+            "summary": {
+                "min": 0.11243147440866529,
+                "max": 1.5874294009714502,
+                "median": 0.3369542910858682,
+                "mean": 0.5106451004939389,
+                "stddev": 0.39072056606170114,
+                "len": 16,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.11243147440866529,
+                    "q1": 0.222505386189035,
+                    "q2": 0.3369542910858682,
+                    "q3": 0.7557959266311085,
+                    "q4": 1.5874294009714502
+                }
+            }
+        },
+        "1dsfm_outlier_angular_errors_deg": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        },
+        "relative_translation_angle_error_deg": {
+            "summary": {
+                "min": 0.13290652632713318,
+                "max": 10.511129379272461,
+                "median": 0.3036080598831177,
+                "mean": 0.6877523064613342,
+                "stddev": 1.6333739757537842,
+                "len": 45,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.13290652632713318,
+                    "q1": 0.20653152465820312,
+                    "q2": 0.3036080598831177,
+                    "q3": 0.46994471549987793,
+                    "q4": 10.511129379272461
+                }
+            }
+        },
+        "translation_error_distance": {
+            "summary": {
+                "min": 0.0007347074570134282,
+                "max": 0.00922265462577343,
+                "median": 0.0035675782710313797,
+                "mean": 0.004540267400443554,
+                "stddev": 0.00266647944226861,
+                "len": 100,
+                "invalid": 90,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "translation_angle_error_deg": {
+            "summary": {
+                "min": 0.010856539942324162,
+                "max": 0.14039744436740875,
+                "median": 0.05856453627347946,
+                "mean": 0.07154043763875961,
+                "stddev": 0.044381603598594666,
+                "len": 100,
+                "invalid": 90,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "total_duration_sec": 3.9786531925201416,
+        "outlier_rejection_duration_sec": 1.6689300537109375e-06,
+        "optimization_duration_sec": 3.8337604999542236
+    }
+}

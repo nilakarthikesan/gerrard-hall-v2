@@ -1,0 +1,72 @@
+[
+    {
+        "i1": 62,
+        "i2": 64,
+        "i1_filename": "IMG_2393.JPG",
+        "i2_filename": "IMG_2395.JPG",
+        "rotation_angular_error": 0.07,
+        "translation_angular_error": 0.25,
+        "num_inliers_gt_model": 1694,
+        "inlier_ratio_gt_model": 0.99,
+        "inlier_avg_reproj_error_gt_model": 2.58,
+        "outlier_avg_reproj_error_gt_model": 17.79,
+        "inlier_ratio_est_model": 0.99,
+        "num_inliers_est_model": 1710
+    },
+    {
+        "i1": 62,
+        "i2": 65,
+        "i1_filename": "IMG_2393.JPG",
+        "i2_filename": "IMG_2396.JPG",
+        "rotation_angular_error": 0.03,
+        "translation_angular_error": 0.04,
+        "num_inliers_gt_model": 1409,
+        "inlier_ratio_gt_model": 0.87,
+        "inlier_avg_reproj_error_gt_model": 2.64,
+        "outlier_avg_reproj_error_gt_model": 21.17,
+        "inlier_ratio_est_model": 1.0,
+        "num_inliers_est_model": 1612
+    },
+    {
+        "i1": 62,
+        "i2": 67,
+        "i1_filename": "IMG_2393.JPG",
+        "i2_filename": "IMG_2398.JPG",
+        "rotation_angular_error": 0.06,
+        "translation_angular_error": 0.06,
+        "num_inliers_gt_model": 581,
+        "inlier_ratio_gt_model": 0.81,
+        "inlier_avg_reproj_error_gt_model": 3.46,
+        "outlier_avg_reproj_error_gt_model": 30.34,
+        "inlier_ratio_est_model": 0.99,
+        "num_inliers_est_model": 718
+    },
+    {
+        "i1": 62,
+        "i2": 63,
+        "i1_filename": "IMG_2393.JPG",
+        "i2_filename": "IMG_2394.JPG",
+        "rotation_angular_error": 0.07,
+        "translation_angular_error": 0.34,
+        "num_inliers_gt_model": 1879,
+        "inlier_ratio_gt_model": 0.99,
+        "inlier_avg_reproj_error_gt_model": 2.42,
+        "outlier_avg_reproj_error_gt_model": 18.84,
+        "inlier_ratio_est_model": 0.99,
+        "num_inliers_est_model": 1901
+    },
+    {
+        "i1": 58,
+        "i2": 62,
+        "i1_filename": "IMG_2389.JPG",
+        "i2_filename": "IMG_2393.JPG",
+        "rotation_angular_error": 0.08,
+        "translation_angular_error": 0.16,
+        "num_inliers_gt_model": 1783,
+        "inlier_ratio_gt_model": 1.0,
+        "inlier_avg_reproj_error_gt_model": 0.63,
+        "outlier_avg_reproj_error_gt_model": 17.95,
+        "inlier_ratio_est_model": 1.0,
+        "num_inliers_est_model": 1784
+    }
+]

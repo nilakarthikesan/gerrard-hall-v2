@@ -1,0 +1,65 @@
+{
+    "view_graph_estimation_metrics": {
+        "num_input_measurements": 85.0,
+        "num_inlier_measurements": 85.0,
+        "num_outlier_measurements": 0.0,
+        "R_precision": 0.9647058844566345,
+        "R_recall": 1.0,
+        "U_precision": 1.0,
+        "U_recall": 1.0,
+        "inlier_R_angular_errors_deg": {
+            "summary": {
+                "min": 0.008175016678886812,
+                "max": 8.664360136957317,
+                "median": 0.08159385451356607,
+                "mean": 0.5164035456267378,
+                "stddev": 1.4432935655547896,
+                "len": 85,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.008175016678886812,
+                    "q1": 0.04638490883031224,
+                    "q2": 0.08159385451356607,
+                    "q3": 0.1738711173502034,
+                    "q4": 8.664360136957317
+                }
+            }
+        },
+        "outlier_R_angular_errors_deg": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        },
+        "inlier_U_angular_errors_deg": {
+            "summary": {
+                "min": 0.005700239748347292,
+                "max": 4.387535301508929,
+                "median": 0.16932085835461633,
+                "mean": 0.37961857628837664,
+                "stddev": 0.7222835396105546,
+                "len": 85,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.005700239748347292,
+                    "q1": 0.09930174516820804,
+                    "q2": 0.16932085835461633,
+                    "q3": 0.2865652400980549,
+                    "q4": 4.387535301508929
+                }
+            }
+        },
+        "outlier_U_angular_errors_deg": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        }
+    }
+}

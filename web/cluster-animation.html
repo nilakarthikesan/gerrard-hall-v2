@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTSFM Cluster Merging Animation - Gerrard Hall</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            z-index: 10;
+            color: white;
+        }
+        h1 {
+            color: #4fc3f7;
+            font-size: 28px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #4fc3f7;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+        .subtitle {
+            color: #b0bec5;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .info-item {
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #90caf9;
+        }
+        .info-value {
+            color: #4fc3f7;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        #timeline-control {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 25px 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            min-width: 700px;
+        }
+        .timeline-label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #4fc3f7;
+            font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .timeline-stage {
+            color: #90caf9;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: linear-gradient(to right, #1a237e, #4fc3f7);
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #4fc3f7;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(79, 195, 247, 0.8);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #4fc3f7;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(79, 195, 247, 0.8);
+        }
+        #play-pause-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 30px;
+            background: #4fc3f7;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+        }
+        #play-pause-btn:hover {
+            background: #29b6f6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.6);
+        }
+        .cluster-legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            color: white;
+            max-width: 250px;
+        }
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4fc3f7;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px 60px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(79, 195, 247, 0.3);
+            border: 2px solid #4fc3f7;
+            z-index: 100;
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(79, 195, 247, 0.3);
+            border-top: 4px solid #4fc3f7;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4fc3f7;
+        }
+        .instructions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            color: #90caf9;
+        }
+        .instructions p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading Cluster Hierarchy...</div>
+        </div>
+        
+        <div id="info-panel">
+            <h1>🏛️ Gerrard Hall</h1>
+            <div class="subtitle">Hierarchical Cluster Reconstruction</div>
+            <div class="info-item">
+                <span class="info-label">Active Clusters:</span>
+                <span class="info-value" id="active-clusters">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Total Points:</span>
+                <span class="info-value" id="point-count">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Merge Stage:</span>
+                <span class="info-value" id="merge-stage">Initial</span>
+            </div>
+            <div class="instructions">
+                <p><strong>Visualization:</strong></p>
+                <p>🔴 Watch clusters repulse & merge</p>
+                <p>🎬 Use timeline to control animation</p>
+                <p>🖱️ Drag to rotate, scroll to zoom</p>
+            </div>
+        </div>
+
+        <div class="cluster-legend">
+            <div class="legend-title">Cluster Colors</div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff5252;"></div>
+                <span>Cluster 1</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4caf50;"></div>
+                <span>Cluster 2</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196f3;"></div>
+                <span>Cluster 3</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffeb3b;"></div>
+                <span>Cluster 4</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #9c27b0;"></div>
+                <span>Sub-clusters</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00bcd4;"></div>
+                <span>Merged</span>
+            </div>
+        </div>
+
+        <div id="timeline-control">
+            <label class="timeline-label">Reconstruction Timeline</label>
+            <input type="range" id="timeline-slider" min="0" max="100" value="0" step="1">
+            <div class="timeline-stage" id="stage-description">Stage 0: Individual Clusters (Repulsed)</div>
+            <button id="play-pause-btn">▶ Play Animation</button>
+        </div>
+
+        <div id="canvas-container"></div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        let scene, camera, renderer, controls;
+        let clusterGroups = [];
+        let isPlaying = false;
+        let animationId = null;
+
+        // Define cluster hierarchy and colors
+        const clusterHierarchy = [
+            { path: 'C_1/merged', color: 0xff5252, name: 'Cluster 1', parent: null },
+            { path: 'C_2/merged', color: 0x4caf50, name: 'Cluster 2', parent: null },
+            { path: 'C_3/merged', color: 0x2196f3, name: 'Cluster 3', parent: null },
+            { path: 'C_4/merged', color: 0xffeb3b, name: 'Cluster 4', parent: null },
+            { path: 'C_1/C_1_1/merged', color: 0x9c27b0, name: 'Cluster 1.1', parent: 'C_1' },
+            { path: 'C_1/C_1_2/merged', color: 0xe91e63, name: 'Cluster 1.2', parent: 'C_1' },
+            { path: 'C_4/C_4_1/merged', color: 0xff9800, name: 'Cluster 4.1', parent: 'C_4' },
+            { path: 'C_4/C_4_2/merged', color: 0x795548, name: 'Cluster 4.2', parent: 'C_4' },
+            { path: 'merged', color: 0x00bcd4, name: 'Final Merged', parent: 'all' }
+        ];
+
+        // Animation stages
+        const stages = [
+            { time: 0, description: 'Stage 0: Individual Clusters (Repulsed)', clusters: [0,1,2,3] },
+            { time: 20, description: 'Stage 1: Sub-clusters Emerging', clusters: [0,1,2,3,4,5,6,7] },
+            { time: 40, description: 'Stage 2: Local Cluster Merging', clusters: [0,1,2,3] },
+            { time: 60, description: 'Stage 3: Global Alignment', clusters: [0,1,2,3] },
+            { time: 80, description: 'Stage 4: Progressive Merging', clusters: [8] },
+            { time: 100, description: 'Stage 5: Final Reconstruction Complete', clusters: [8] }
+        ];
+
+        function init() {
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+            scene.fog = new THREE.Fog(0x0a0a0a, 10, 50);
+            
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(8, 5, 8);
+            
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            // Controls
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 2;
+            controls.maxDistance = 30;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+            
+            // Dramatic lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+            scene.add(ambientLight);
+            
+            const keyLight = new THREE.DirectionalLight(0x4fc3f7, 1.0);
+            keyLight.position.set(10, 15, 10);
+            keyLight.castShadow = true;
+            scene.add(keyLight);
+            
+            const fillLight = new THREE.DirectionalLight(0xff5252, 0.3);
+            fillLight.position.set(-10, 5, -10);
+            scene.add(fillLight);
+            
+            const rimLight = new THREE.DirectionalLight(0x9c27b0, 0.5);
+            rimLight.position.set(0, 10, -15);
+            scene.add(rimLight);
+            
+            // Ground plane with grid
+            const gridHelper = new THREE.GridHelper(20, 20, 0x4fc3f7, 0x1a237e);
+            gridHelper.material.opacity = 0.2;
+            gridHelper.material.transparent = true;
+            scene.add(gridHelper);
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize, false);
+            
+            // Timeline control
+            document.getElementById('timeline-slider').addEventListener('input', (e) => {
+                updateAnimation(parseFloat(e.target.value));
+            });
+            
+            document.getElementById('play-pause-btn').addEventListener('click', togglePlayPause);
+            
+            // Start animation loop
+            animate();
+            
+            // Load clusters
+            loadClusters();
+        }
+
+        async function loadClusters() {
+            let totalPoints = 0;
+            
+            for (let i = 0; i < clusterHierarchy.length; i++) {
+                const cluster = clusterHierarchy[i];
+                try {
+                    const path = `../data/gerrard-hall/results/${cluster.path}`;
+                    const points3DData = await fetch(`${path}/points3D.txt`).then(r => r.text());
+                    
+                    const positions = [];
+                    const colors = [];
+                    
+                    const lines = points3DData.split('\n');
+                    for (let line of lines) {
+                        if (line.startsWith('#') || line.trim() === '') continue;
+                        
+                        const parts = line.trim().split(/\s+/);
+                        if (parts.length < 8) continue;
+                        
+                        const x = parseFloat(parts[1]);
+                        const y = parseFloat(parts[2]);
+                        const z = parseFloat(parts[3]);
+                        
+                        positions.push(x, y, z);
+                        
+                        // Use cluster color
+                        const color = new THREE.Color(cluster.color);
+                        colors.push(color.r, color.g, color.b);
+                    }
+                    
+                    if (positions.length > 0) {
+                        const geometry = new THREE.BufferGeometry();
+                        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+                        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+                        
+                        const material = new THREE.PointsMaterial({
+                            size: 0.03,
+                            vertexColors: true,
+                            sizeAttenuation: true,
+                            transparent: true,
+                            opacity: 0.8
+                        });
+                        
+                        const pointCloud = new THREE.Points(geometry, material);
+                        
+                        // Store original position
+                        geometry.computeBoundingSphere();
+                        const center = geometry.boundingSphere.center.clone();
+                        
+                        // Create group for animation
+                        const group = new THREE.Group();
+                        group.add(pointCloud);
+                        group.userData = {
+                            index: i,
+                            originalCenter: center,
+                            cluster: cluster,
+                            pointCount: positions.length / 3
+                        };
+                        
+                        scene.add(group);
+                        clusterGroups.push(group);
+                        
+                        totalPoints += positions.length / 3;
+                    }
+                    
+                } catch (error) {
+                    console.warn(`Could not load cluster ${cluster.name}:`, error);
+                }
+            }
+            
+            document.getElementById('point-count').textContent = totalPoints.toLocaleString();
+            document.getElementById('loading').style.display = 'none';
+            
+            // Initialize animation
+            updateAnimation(0);
+        }
+
+        function updateAnimation(time) {
+            // Determine current stage
+            let currentStage = stages[0];
+            for (let stage of stages) {
+                if (time >= stage.time) currentStage = stage;
+            }
+            
+            document.getElementById('stage-description').textContent = currentStage.description;
+            document.getElementById('merge-stage').textContent = `${Math.floor(time)}%`;
+            
+            // Calculate repulsion/attraction for each cluster
+            const repulsionStrength = Math.max(0, (40 - time) / 40) * 3;
+            const mergeProgress = Math.max(0, (time - 40) / 60);
+            
+            let activeClusters = 0;
+            
+            clusterGroups.forEach((group, index) => {
+                const cluster = group.userData.cluster;
+                const isVisible = currentStage.clusters.includes(index);
+                
+                if (isVisible) {
+                    group.visible = true;
+                    activeClusters++;
+                    
+                    // Repulsion phase (0-40)
+                    if (time < 40) {
+                        const angle = (index / clusterGroups.length) * Math.PI * 2;
+                        const distance = repulsionStrength;
+                        group.position.x = Math.cos(angle) * distance;
+                        group.position.z = Math.sin(angle) * distance;
+                        group.position.y = Math.sin(time * 0.05 + index) * 0.5;
+                        
+                        // Rotate clusters during repulsion
+                        group.rotation.y = time * 0.02;
+                        
+                        group.children[0].material.opacity = 0.9;
+                        group.children[0].material.size = 0.03;
+                    } 
+                    // Merging phase (40-100)
+                    else {
+                        const targetX = 0;
+                        const targetY = 0;
+                        const targetZ = 0;
+                        
+                        group.position.x = THREE.MathUtils.lerp(group.position.x, targetX, mergeProgress * 0.05);
+                        group.position.y = THREE.MathUtils.lerp(group.position.y, targetY, mergeProgress * 0.05);
+                        group.position.z = THREE.MathUtils.lerp(group.position.z, targetZ, mergeProgress * 0.05);
+                        
+                        group.rotation.y = THREE.MathUtils.lerp(group.rotation.y, 0, mergeProgress * 0.05);
+                        
+                        // Fade out individual clusters as merge progresses
+                        if (index < clusterGroups.length - 1) {
+                            group.children[0].material.opacity = Math.max(0.2, 1 - mergeProgress);
+                            group.children[0].material.size = 0.03 * (1 - mergeProgress * 0.5);
+                        } else {
+                            // Fade in final merged cluster
+                            group.children[0].material.opacity = Math.min(1, mergeProgress * 1.5);
+                            group.children[0].material.size = 0.025;
+                        }
+                    }
+                } else {
+                    group.visible = false;
+                }
+            });
+            
+            document.getElementById('active-clusters').textContent = activeClusters;
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const btn = document.getElementById('play-pause-btn');
+            const slider = document.getElementById('timeline-slider');
+            
+            if (isPlaying) {
+                btn.textContent = '⏸ Pause';
+                controls.autoRotate = true;
+                
+                function playAnimation() {
+                    if (!isPlaying) return;
+                    
+                    let currentValue = parseFloat(slider.value);
+                    currentValue += 0.5;
+                    
+                    if (currentValue > 100) {
+                        currentValue = 0;
+                    }
+                    
+                    slider.value = currentValue;
+                    updateAnimation(currentValue);
+                    
+                    animationId = setTimeout(playAnimation, 50);
+                }
+                playAnimation();
+            } else {
+                btn.textContent = '▶ Play';
+                controls.autoRotate = false;
+                if (animationId) {
+                    clearTimeout(animationId);
+                }
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
+

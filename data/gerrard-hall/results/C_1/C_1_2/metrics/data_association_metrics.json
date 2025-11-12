@@ -1,0 +1,92 @@
+{
+    "data_association_metrics": {
+        "2D_track_lengths": {
+            "summary": {
+                "min": 2,
+                "max": 12,
+                "median": 3.0,
+                "mean": 3.6281512605042017,
+                "stddev": 1.9621859985961185,
+                "len": 3808,
+                "invalid": 0,
+                "histogram": {
+                    "2": 747,
+                    "3": 522,
+                    "4": 370,
+                    "5": 238,
+                    "6": 166,
+                    "7": 100,
+                    "8": 74,
+                    "9": 28,
+                    "10": 15,
+                    "11": 4
+                }
+            }
+        },
+        "accepted_tracks_ratio": 0.5774685144424438,
+        "track_cheirality_failure_ratio": 0.0,
+        "num_accepted_tracks": 2199.0,
+        "3d_tracks_length": {
+            "summary": {
+                "min": 3,
+                "max": 12,
+                "median": 4.0,
+                "mean": 4.720327421555252,
+                "stddev": 1.8318342745934961,
+                "len": 2199,
+                "invalid": 0,
+                "histogram": {
+                    "3": 517,
+                    "4": 364,
+                    "5": 233,
+                    "6": 160,
+                    "7": 92,
+                    "8": 68,
+                    "9": 25,
+                    "10": 15,
+                    "11": 4
+                }
+            }
+        },
+        "accepted_track_avg_errors_px": {
+            "summary": {
+                "min": 0.024058714509010315,
+                "max": 5.218295574188232,
+                "median": 0.6240133047103882,
+                "mean": 0.8880457878112793,
+                "stddev": 0.741188108921051,
+                "len": 2199,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.024058714509010315,
+                    "q1": 0.44060808420181274,
+                    "q2": 0.6240133047103882,
+                    "q3": 1.0131421089172363,
+                    "q4": 5.218295574188232
+                }
+            }
+        },
+        "rejected_track_avg_errors_px": {
+            "summary": {
+                "min": 0.00020585059246513993,
+                "max": 4.97963809967041,
+                "median": 0.2194768190383911,
+                "mean": 0.2543334662914276,
+                "stddev": 0.28719577193260193,
+                "len": 1609,
+                "invalid": 1,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "number_cameras": 12.0,
+        "triangulation_runtime_sec": 10.557228088378906,
+        "gtsfm_data_creation_runtime": 0.07858777046203613,
+        "total_duration_sec": 10.63581657409668
+    }
+}

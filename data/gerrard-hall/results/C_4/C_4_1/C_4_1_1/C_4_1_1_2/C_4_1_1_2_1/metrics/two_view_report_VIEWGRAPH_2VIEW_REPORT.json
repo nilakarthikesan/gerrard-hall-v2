@@ -1,0 +1,16 @@
+[
+    {
+        "i1": 54,
+        "i2": 56,
+        "i1_filename": "IMG_2385.JPG",
+        "i2_filename": "IMG_2387.JPG",
+        "rotation_angular_error": 100.12,
+        "translation_angular_error": 99.86,
+        "num_inliers_gt_model": 0,
+        "inlier_ratio_gt_model": null,
+        "inlier_avg_reproj_error_gt_model": null,
+        "outlier_avg_reproj_error_gt_model": 7729.94,
+        "inlier_ratio_est_model": 0.65,
+        "num_inliers_est_model": 17
+    }
+]

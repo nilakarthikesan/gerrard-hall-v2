@@ -1,0 +1,24 @@
+{
+    "rotation_averaging_metrics": {
+        "num_rotations_computed": 4.0,
+        "rotation_angle_error_deg": {
+            "summary": {
+                "min": 0.0262325257062912,
+                "max": 0.2994937598705292,
+                "median": 0.14702579379081726,
+                "mean": 0.15494447946548462,
+                "stddev": 0.1083238422870636,
+                "len": 100,
+                "invalid": 96,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "total_duration_sec": 0.0005676746368408203
+    }
+}

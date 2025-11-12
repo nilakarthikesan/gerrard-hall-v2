@@ -1,0 +1,6 @@
+{
+    "frontend_runtime_metrics": {
+        "total_correspondence_generation_duration_sec": 39.07345962524414,
+        "total_two_view_estimation_duration_sec": 13.99595832824707
+    }
+}

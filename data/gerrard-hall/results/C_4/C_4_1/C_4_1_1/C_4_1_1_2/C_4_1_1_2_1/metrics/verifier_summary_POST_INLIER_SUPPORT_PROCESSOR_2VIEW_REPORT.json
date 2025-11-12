@@ -1,0 +1,137 @@
+{
+    "verifier_summary_POST_INLIER_SUPPORT_PROCESSOR_2VIEW_REPORT": {
+        "angular_err_threshold_deg": 5.0,
+        "num_input_image_pairs": 1.0,
+        "num_valid_image_pairs": 1.0,
+        "rotation_success_count": 0.0,
+        "translation_success_count": 0.0,
+        "pose_success_count": 0.0,
+        "num_all_inlier_correspondences_wrt_gt_model": 0.0,
+        "rot3_angular_errors_deg": {
+            "summary": {
+                "min": 100.11673308996025,
+                "max": 100.11673308996025,
+                "median": 100.11673308996025,
+                "mean": 100.11673308996025,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 100.11673308996025,
+                    "q1": 100.11673308996025,
+                    "q2": 100.11673308996025,
+                    "q3": 100.11673308996025,
+                    "q4": 100.11673308996025
+                }
+            }
+        },
+        "trans_angular_errors_deg": {
+            "summary": {
+                "min": 99.86127105643885,
+                "max": 99.86127105643885,
+                "median": 99.86127105643885,
+                "mean": 99.86127105643885,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 99.86127105643885,
+                    "q1": 99.86127105643885,
+                    "q2": 99.86127105643885,
+                    "q3": 99.86127105643885,
+                    "q4": 99.86127105643885
+                }
+            }
+        },
+        "pose_errors_deg": {
+            "summary": {
+                "min": 100.11673308996025,
+                "max": 100.11673308996025,
+                "median": 100.11673308996025,
+                "mean": 100.11673308996025,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 100.11673308996025,
+                    "q1": 100.11673308996025,
+                    "q2": 100.11673308996025,
+                    "q3": 100.11673308996025,
+                    "q4": 100.11673308996025
+                }
+            }
+        },
+        "inlier_ratio_wrt_gt_model": {
+            "summary": {
+                "min": 0.0,
+                "max": 0.0,
+                "median": 0.0,
+                "mean": 0.0,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.0,
+                    "q1": 0.0,
+                    "q2": 0.0,
+                    "q3": 0.0,
+                    "q4": 0.0
+                }
+            }
+        },
+        "inlier_ratio_wrt_est_model": {
+            "summary": {
+                "min": 0.6491228342056274,
+                "max": 0.6491228342056274,
+                "median": 0.6491228342056274,
+                "mean": 0.6491228342056274,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.6491228342056274,
+                    "q1": 0.6491228342056274,
+                    "q2": 0.6491228342056274,
+                    "q3": 0.6491228342056274,
+                    "q4": 0.6491228342056274
+                }
+            }
+        },
+        "num_inliers_est_model": {
+            "summary": {
+                "min": 17,
+                "max": 17,
+                "median": 17.0,
+                "mean": 17.0,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 17.0,
+                    "q1": 17.0,
+                    "q2": 17.0,
+                    "q3": 17.0,
+                    "q4": 17.0
+                }
+            }
+        },
+        "num_inliers_gt_model": {
+            "summary": {
+                "min": 0,
+                "max": 0,
+                "median": 0.0,
+                "mean": 0.0,
+                "stddev": 0.0,
+                "len": 1,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.0,
+                    "q1": 0.0,
+                    "q2": 0.0,
+                    "q3": 0.0,
+                    "q4": 0.0
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "data_association_metrics": {
+        "2D_track_lengths": {
+            "summary": {
+                "min": 2,
+                "max": 7,
+                "median": 4.0,
+                "mean": 4.024908424908425,
+                "stddev": 1.5556003313452338,
+                "len": 2730,
+                "invalid": 0,
+                "histogram": {
+                    "2": 540,
+                    "3": 502,
+                    "4": 528,
+                    "5": 375,
+                    "6": 180
+                }
+            }
+        },
+        "accepted_tracks_ratio": 0.7769230604171753,
+        "track_cheirality_failure_ratio": 0.0,
+        "num_accepted_tracks": 2121.0,
+        "3d_tracks_length": {
+            "summary": {
+                "min": 3,
+                "max": 7,
+                "median": 5.0,
+                "mean": 4.603960396039604,
+                "stddev": 1.2678386224573919,
+                "len": 2121,
+                "invalid": 0,
+                "histogram": {
+                    "3": 503,
+                    "4": 527,
+                    "5": 375,
+                    "6": 180
+                }
+            }
+        },
+        "accepted_track_avg_errors_px": {
+            "summary": {
+                "min": 0.05472104996442795,
+                "max": 4.385311126708984,
+                "median": 0.506331741809845,
+                "mean": 0.6461217999458313,
+                "stddev": 0.44827398657798767,
+                "len": 2121,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.05472104996442795,
+                    "q1": 0.3769563138484955,
+                    "q2": 0.506331741809845,
+                    "q3": 0.7408406734466553,
+                    "q4": 4.385311126708984
+                }
+            }
+        },
+        "rejected_track_avg_errors_px": {
+            "summary": {
+                "min": 0.001137387240305543,
+                "max": 0.5145868062973022,
+                "median": 0.2159072905778885,
+                "mean": 0.22546492516994476,
+                "stddev": 0.14006152749061584,
+                "len": 609,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.001137387240305543,
+                    "q1": 0.10337521880865097,
+                    "q2": 0.2159072905778885,
+                    "q3": 0.3403417468070984,
+                    "q4": 0.5145868062973022
+                }
+            }
+        },
+        "number_cameras": 7.0,
+        "triangulation_runtime_sec": 9.296234130859375,
+        "gtsfm_data_creation_runtime": 0.03413271903991699,
+        "total_duration_sec": 9.330367088317871
+    }
+}

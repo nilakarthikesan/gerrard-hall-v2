@@ -1,0 +1,61 @@
+{
+    "data_association_metrics": {
+        "2D_track_lengths": {
+            "summary": {
+                "min": 2,
+                "max": 2,
+                "median": 2.0,
+                "mean": 2.0,
+                "stddev": 0.0,
+                "len": 17,
+                "invalid": 0,
+                "histogram": {
+                    "1": 17
+                }
+            }
+        },
+        "accepted_tracks_ratio": 0.0,
+        "track_cheirality_failure_ratio": 0.0,
+        "num_accepted_tracks": 0.0,
+        "3d_tracks_length": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        },
+        "accepted_track_avg_errors_px": {
+            "summary": {
+                "min": null,
+                "max": null,
+                "median": null,
+                "mean": null,
+                "stddev": null
+            }
+        },
+        "rejected_track_avg_errors_px": {
+            "summary": {
+                "min": 0.01776968315243721,
+                "max": 0.48758333921432495,
+                "median": 0.22691427171230316,
+                "mean": 0.23057253658771515,
+                "stddev": 0.138699471950531,
+                "len": 17,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.01776968315243721,
+                    "q1": 0.10244909673929214,
+                    "q2": 0.22691427171230316,
+                    "q3": 0.32491451501846313,
+                    "q4": 0.48758333921432495
+                }
+            }
+        },
+        "number_cameras": 0.0,
+        "triangulation_runtime_sec": 0.027447938919067383,
+        "gtsfm_data_creation_runtime": 0.0014679431915283203,
+        "total_duration_sec": 0.028916358947753906
+    }
+}

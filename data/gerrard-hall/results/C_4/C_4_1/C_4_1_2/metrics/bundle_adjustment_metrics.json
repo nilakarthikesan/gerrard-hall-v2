@@ -1,0 +1,186 @@
+{
+    "bundle_adjustment_metrics": {
+        "number_cameras": 12.0,
+        "number_tracks_unfiltered": 1948.0,
+        "3d_track_lengths_unfiltered": {
+            "summary": {
+                "min": 3,
+                "max": 11,
+                "median": 4.0,
+                "mean": 4.174024640657084,
+                "stddev": 1.3863528235422455,
+                "len": 1948,
+                "invalid": 0,
+                "histogram": {
+                    "3": 461,
+                    "4": 309,
+                    "5": 187,
+                    "6": 86,
+                    "7": 41,
+                    "8": 9,
+                    "9": 4,
+                    "10": 2
+                }
+            }
+        },
+        "reprojection_errors_unfiltered_px": {
+            "summary": {
+                "min": 0.005692801413256548,
+                "max": 10.346351670288186,
+                "median": 0.5244448125702745,
+                "mean": 0.7469069474296691,
+                "stddev": 0.9206920114532289,
+                "len": 8131,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.005692801413256548,
+                    "q1": 0.3247716917041896,
+                    "q2": 0.5244448125702745,
+                    "q3": 0.8109646979753742,
+                    "q4": 10.346351670288186
+                }
+            }
+        },
+        "rotation_angle_error_deg": {
+            "summary": {
+                "min": 0.01383007038384676,
+                "max": 0.9010047316551208,
+                "median": 0.10140907019376755,
+                "mean": 0.2059289813041687,
+                "stddev": 0.25006943941116333,
+                "len": 100,
+                "invalid": 88,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "translation_error_distance": {
+            "summary": {
+                "min": 0.0007268438930623233,
+                "max": 0.027398405596613884,
+                "median": 0.0016222443664446473,
+                "mean": 0.005597138311713934,
+                "stddev": 0.008389176800847054,
+                "len": 100,
+                "invalid": 88,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "relative_translation_angle_error_deg": {
+            "summary": {
+                "min": 0.010430991649627686,
+                "max": 4.200769901275635,
+                "median": 0.09469342231750488,
+                "mean": 0.40109559893608093,
+                "stddev": 0.7360103726387024,
+                "len": 66,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.010430991649627686,
+                    "q1": 0.0478530740365386,
+                    "q2": 0.09469341859221458,
+                    "q3": 0.3492155894637108,
+                    "q4": 4.200769901275635
+                }
+            }
+        },
+        "translation_angle_error_deg": {
+            "summary": {
+                "min": 0.006110368762165308,
+                "max": 0.3565409183502197,
+                "median": 0.015463870018720627,
+                "mean": 0.06703732162714005,
+                "stddev": 0.10630456358194351,
+                "len": 100,
+                "invalid": 88,
+                "quartiles": {
+                    "q0": null,
+                    "q1": null,
+                    "q2": null,
+                    "q3": null,
+                    "q4": null
+                }
+            }
+        },
+        "relative_rotation_angle_error_deg": {
+            "summary": {
+                "min": 0.0033325788099318743,
+                "max": 0.9608138203620911,
+                "median": 0.20571011304855347,
+                "mean": 0.3236088156700134,
+                "stddev": 0.29361510276794434,
+                "len": 66,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.0033325788099318743,
+                    "q1": 0.09213129989802837,
+                    "q2": 0.20571010559797287,
+                    "q3": 0.5412811785936356,
+                    "q4": 0.9608138203620911
+                }
+            }
+        },
+        "pose_auc_@1.0_deg": 0.6129994988441467,
+        "pose_auc_@2.5_deg": 0.8097692728042603,
+        "pose_auc_@5.0_deg": 0.9018615484237671,
+        "pose_auc_@10.0_deg": 0.9509307742118835,
+        "pose_auc_@20.0_deg": 0.9754653573036194,
+        "Filtered tracks triangulated with GT cams: SUCCESS": 1720.0,
+        "Filtered tracks triangulated with GT cams: EXCEEDS_REPROJ_THRESH": 2.0,
+        "number_tracks_filtered": 1722.0,
+        "3d_track_lengths_filtered": {
+            "summary": {
+                "min": 3,
+                "max": 11,
+                "median": 4.0,
+                "mean": 4.156794425087108,
+                "stddev": 1.378797786612836,
+                "len": 1722,
+                "invalid": 0,
+                "histogram": {
+                    "3": 407,
+                    "4": 272,
+                    "5": 160,
+                    "6": 74,
+                    "7": 35,
+                    "8": 9,
+                    "9": 4,
+                    "10": 1
+                }
+            }
+        },
+        "reprojection_errors_filtered_px": {
+            "summary": {
+                "min": 0.005692801413268458,
+                "max": 2.9878919565515463,
+                "median": 0.4893604571099834,
+                "mean": 0.5848978732214627,
+                "stddev": 0.4241593035972697,
+                "len": 7158,
+                "invalid": 0,
+                "quartiles": {
+                    "q0": 0.005692801413268458,
+                    "q1": 0.30588247148096437,
+                    "q2": 0.4893604571099834,
+                    "q3": 0.7431785068290334,
+                    "q4": 2.9878919565515463
+                }
+            }
+        },
+        "step_0_run_duration_sec": 0.6295061111450195,
+        "step_1_run_duration_sec": 0.622086763381958,
+        "step_2_run_duration_sec": 0.6668276786804199,
+        "total_run_duration_sec": 1.9188036918640137
+    }
+}
