@@ -8,7 +8,7 @@ Interactive 3D visualization demonstrating the hierarchical cluster merging proc
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 Using Gerrard Hall as our test scene lets us visualize GTSFM's hierarchical cluster merging process—showing how separate reconstructions combine into a unified 3D model. I've been unable to fully run GTSFM or decompress the VVGT directory due to limited RAM, so I'm testing on a smaller cluster for now. The animation draws inspiration from "Building Rome in a Day," illustrating clusters repulsing and merging over time into the final reconstruction.
 
@@ -18,7 +18,7 @@ This interactive visualization demonstrates the hierarchical cluster merging pro
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.x (for local server)
@@ -64,7 +64,7 @@ This interactive visualization demonstrates the hierarchical cluster merging pro
 
 ---
 
-## 📊 Data Structure
+## Data Structure
 
 ```
 data/gerrard-hall/results/
@@ -88,7 +88,7 @@ Each cluster directory contains:
 
 ---
 
-## 🎬 Visualization Features
+## Visualization Features
 
 ### Animation Stages
 
@@ -100,16 +100,16 @@ Each cluster directory contains:
 
 ### Color Coding
 
-- 🔴 **Red** - Cluster 1
-- 🟢 **Green** - Cluster 2
-- 🔵 **Blue** - Cluster 3
-- 🟡 **Yellow** - Cluster 4
-- 🟣 **Purple** - Sub-clusters
-- 🔵 **Cyan** - Final merged reconstruction
+- **Red** - Cluster 1
+- **Green** - Cluster 2
+- **Blue** - Cluster 3
+- **Yellow** - Cluster 4
+- **Purple** - Sub-clusters
+- **Cyan** - Final merged reconstruction
 
 ---
 
-## 🏛️ Why Gerrard Hall?
+## Why Gerrard Hall?
 
 Gerrard Hall serves as our reference dataset because:
 
@@ -120,7 +120,7 @@ Gerrard Hall serves as our reference dataset because:
 
 ---
 
-## ⚙️ Technical Challenges & Limitations
+## Technical Challenges & Limitations
 
 ### Current Issues with GTSFM
 
@@ -143,7 +143,7 @@ I've encountered several technical limitations while working with the full GTSFM
 
 ---
 
-## 🌍 Inspiration: Building Rome in a Day
+## Inspiration: Building Rome in a Day
 
 This visualization is conceptually modeled after the seminal ["Building Rome in a Day"](http://grail.cs.washington.edu/rome/) project by Agarwal et al. (2009), which demonstrated:
 
@@ -165,7 +165,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Three.js** - 3D rendering and point cloud visualization
 - **OrbitControls** - Interactive camera controls
@@ -175,7 +175,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 📚 Related Work
+## Related Work
 
 - **GTSFM:** [Georgia Tech Structure from Motion](https://github.com/borglab/gtsfm)
 - **Building Rome in a Day:** [Paper (ICCV 2009)](http://grail.cs.washington.edu/rome/rome_paper.pdf)
@@ -184,7 +184,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 📝 Data Format
+## Data Format
 
 ### Point Cloud Format (`points3D.txt`)
 ```
@@ -200,7 +200,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 🎯 Future Work
+## Future Work
 
 - [ ] Deploy to GitHub Pages for online access
 - [ ] Add camera trajectory visualization
@@ -212,7 +212,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Cluster Animation
 *Individual clusters spatially separated (Stage 0)*
@@ -222,7 +222,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 🤝 Acknowledgments
+## Acknowledgments
 
 - **GTSFM Team** at Georgia Tech for the reconstruction pipeline
 - **Kathir** for providing the Gerrard Hall dataset and C_4 cluster
@@ -231,7 +231,7 @@ Our approach makes GTSFM's internal clustering and merging stages **visually int
 
 ---
 
-## 📄 License
+## License
 
 This visualization code is provided for educational and research purposes.
 
@@ -239,7 +239,7 @@ The Gerrard Hall reconstruction data is courtesy of the GTSFM project at Georgia
 
 ---
 
-## 📧 Contact
+## Contact
 
 For questions or collaboration:
 - GitHub: [@nilakarthikesan](https://github.com/nilakarthikesan)
@@ -247,5 +247,5 @@ For questions or collaboration:
 
 ---
 
-**Built with ❤️ for advancing 3D reconstruction visualization**
+**Built for advancing 3D reconstruction visualization**
 
