@@ -297,6 +297,10 @@
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth - 350, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
+            // Match GTSFM viewer color appearance
+            if (THREE && THREE.SRGBColorSpace) {
+                renderer.outputColorSpace = THREE.SRGBColorSpace;
+            }
             container.appendChild(renderer.domElement);
             
             // Controls
@@ -327,6 +331,8 @@
             document.getElementById('step-forward-btn').addEventListener('click', stepForward);
             document.getElementById('reset-btn').addEventListener('click', reset);
             window.addEventListener('resize', onWindowResize);
+            // Recording controls (optional video export)
+            addRecordingControls();
             
             // Start animation loop
             animate();
@@ -418,8 +424,11 @@
 
             // Load all reconstructions
             let loadedCount = 0;
+            // Track global bounds to place camera sensibly
+            const globalMin = new THREE.Vector3( Infinity,  Infinity,  Infinity);
+            const globalMax = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
             for (const item of flatPaths) {
-                await loadReconstruction(item.path, item.type, item.children);
+                await loadReconstruction(item.path, item.type, item.children, globalMin, globalMax);
                 loadedCount++;
                 document.querySelector('.loading-text').textContent = 
                     `Loading reconstructions... ${loadedCount}/${flatPaths.length}`;
@@ -436,6 +445,23 @@
             // Build tree view
             buildTreeView();
             
+            // Initialize viewing camera from an original camera pose if available
+            try {
+                const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
+                const radius = center.distanceTo(globalMax) || 5;
+                // Prefer final merged, else fall back to ba_output
+                const basePath = reconstructions.has('merged') ? 'merged' : 'ba_output';
+                await setInitialCameraFromColmap(`../data/gerrard-hall/results/${basePath}`, center, radius);
+                controls.target.copy(center);
+            } catch (e) {
+                // Fallback: position camera diagonally above center
+                const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
+                const radius = center.distanceTo(globalMax) || 5;
+                camera.position.set(center.x + radius * 2.5, center.y + radius * 1.5, center.z + radius * 2.5);
+                camera.lookAt(center);
+                controls.target.copy(center);
+            }
+
             // Hide loading
             document.getElementById('loading').style.display = 'none';
             
@@ -443,7 +469,7 @@
             applyEvent(0);
         }
 
-        async function loadReconstruction(path, type, children) {
+        async function loadReconstruction(path, type, children, globalMin, globalMax) {
             try {
                 const fullPath = `../data/gerrard-hall/results/${path}`;
                 const points3DData = await fetch(`${fullPath}/points3D.txt`).then(r => r.text());
@@ -467,6 +493,17 @@
                     
                     positions.push(x, y, z);
                     colors.push(r, g, b);
+                    // Update global bounding box
+                    if (globalMin) {
+                        if (x < globalMin.x) globalMin.x = x;
+                        if (y < globalMin.y) globalMin.y = y;
+                        if (z < globalMin.z) globalMin.z = z;
+                    }
+                    if (globalMax) {
+                        if (x > globalMax.x) globalMax.x = x;
+                        if (y > globalMax.y) globalMax.y = y;
+                        if (z > globalMax.z) globalMax.z = z;
+                    }
                 }
                 
                 if (positions.length > 0) {
@@ -494,6 +531,37 @@
                 }
             } catch (error) {
                 console.warn(`Could not load ${path}:`, error);
+            }
+        }
+
+        // Initialize camera from COLMAP images.txt (first valid image)
+        async function setInitialCameraFromColmap(basePath, center, radius) {
+            const imagesTxt = await fetch(`${basePath}/images.txt`).then(r => r.text());
+            const lines = imagesTxt.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line === '' || line.startsWith('#')) continue;
+                const parts = line.split(/\s+/);
+                if (parts.length < 10) continue;
+                const qw = parseFloat(parts[1]);
+                const qx = parseFloat(parts[2]);
+                const qy = parseFloat(parts[3]);
+                const qz = parseFloat(parts[4]);
+                const tx = parseFloat(parts[5]);
+                const ty = parseFloat(parts[6]);
+                const tz = parseFloat(parts[7]);
+                const q = new THREE.Quaternion(qx, qy, qz, qw);
+                const R4 = new THREE.Matrix4().makeRotationFromQuaternion(q);
+                const R = new THREE.Matrix3().setFromMatrix4(R4);
+                const Rt = new THREE.Matrix3().copy(R).transpose();
+                const t = new THREE.Vector3(tx, ty, tz);
+                // Camera center C = -R^T * t
+                const C = t.clone().applyMatrix3(Rt).multiplyScalar(-1);
+                const dir = center.clone().sub(C).normalize();
+                const camPos = C.clone().add(dir.multiplyScalar(radius * 2.5));
+                camera.position.copy(camPos);
+                camera.lookAt(center);
+                return;
             }
         }
 
@@ -632,6 +700,53 @@
             
             document.getElementById('visible-count').textContent = visibleCount;
             document.getElementById('points-shown').textContent = totalPoints.toLocaleString();
+        }
+
+        // --- Recording support (MediaRecorder WebM) ---
+        function addRecordingControls() {
+            const controlsEl = document.getElementById('controls');
+            const group = document.createElement('div');
+            group.className = 'button-group';
+            const startBtn = document.createElement('button');
+            startBtn.textContent = '● Start Recording';
+            const stopBtn = document.createElement('button');
+            stopBtn.textContent = '■ Stop & Download';
+            group.appendChild(startBtn);
+            group.appendChild(stopBtn);
+            controlsEl.appendChild(group);
+            startBtn.addEventListener('click', () => {
+                startRecording();
+                // Auto-play during recording
+                if (!isPlaying) togglePlay();
+            });
+            stopBtn.addEventListener('click', () => {
+                stopRecording();
+            });
+        }
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        function startRecording() {
+            if (mediaRecorder) return;
+            const stream = renderer.domElement.captureStream(30);
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+            recordedChunks = [];
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+            };
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'merge-tree.webm';
+                a.click();
+                URL.revokeObjectURL(url);
+                mediaRecorder = null;
+            };
+            mediaRecorder.start();
+        }
+        function stopRecording() {
+            if (mediaRecorder) mediaRecorder.stop();
         }
 
         function onTimelineChange(e) {

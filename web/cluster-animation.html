@@ -352,6 +352,10 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
+            // Match GTSFM viewer color appearance
+            if (THREE && THREE.SRGBColorSpace) {
+                renderer.outputColorSpace = THREE.SRGBColorSpace;
+            }
             document.getElementById('canvas-container').appendChild(renderer.domElement);
             
             // Controls
