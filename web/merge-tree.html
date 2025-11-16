@@ -576,14 +576,18 @@
 
             const bbox = new THREE.Box3(globalMin.clone(), globalMax.clone());
             const sphere = bbox.getBoundingSphere(new THREE.Sphere());
-            const radius = sphere.radius;
+            let radius = sphere.radius;
             if (!isFinite(radius) || radius <= 0) return;
 
-            // Compute distance so the bounding sphere fits nicely in the view
+            // Heuristic: ignore extremely far-out points when framing, so the main building fills the screen.
+            // This caps the effective radius used for camera distance.
+            const effectiveRadius = Math.min(radius, 20.0);
+
+            // Compute distance so the effective bounding sphere fits nicely in the view
             const fov = camera.fov * (Math.PI / 180);
-            const baseDistance = radius / Math.tan(fov / 2);
-            // Make the model appear much larger on screen by using a closer distance
-            const distance = baseDistance * 0.35; // was 1.2, now significantly closer
+            const baseDistance = effectiveRadius / Math.tan(fov / 2);
+            // Bring the model much closer so it occupies most of the viewport
+            const distance = baseDistance * 0.8;
 
             let dir = camera.position.clone().sub(center);
             if (dir.lengthSq() === 0) {
@@ -592,7 +596,7 @@
             dir.normalize();
 
             camera.position.copy(center.clone().add(dir.multiplyScalar(distance)));
-            camera.near = distance * 0.05;
+            camera.near = Math.max(0.01, distance * 0.02);
             camera.far = distance * 40;
             camera.updateProjectionMatrix();
 
