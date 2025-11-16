@@ -292,6 +292,9 @@
         let sceneCenter = null;
         let sceneRadius = 0;
         let flythroughStartTime = null;
+        let flyStartPos = null;
+        let flyMidPos = null;
+        let flyEndPos = null;
 
         function init() {
             // Scene setup
@@ -903,28 +906,48 @@
             if (!sceneCenter) return;
             cameraMode = 'flythrough';
             flythroughStartTime = performance.now();
+
+            // Store current (front) shot as start of the movie
+            flyStartPos = camera.position.clone();
+
+            // Define two additional key positions for a simple movie-like path:
+            // - flyMidPos: move closer toward the facade
+            // - flyEndPos: sweep to the side for a three-quarter view
+            const viewDir = sceneCenter.clone().sub(flyStartPos).normalize();
+            const distanceToCenter = flyStartPos.distanceTo(sceneCenter);
+            const closerDistance = distanceToCenter * 0.5;
+
+            flyMidPos = sceneCenter.clone().sub(viewDir.clone().multiplyScalar(closerDistance));
+
+            const sideDir = new THREE.Vector3(viewDir.z, 0, -viewDir.x).normalize();
+            const sideOffset = distanceToCenter * 0.5;
+            flyEndPos = flyMidPos.clone().add(sideDir.multiplyScalar(sideOffset));
         }
 
         function animate(time) {
             requestAnimationFrame(animate);
 
             // If in cinematic flythrough mode, move camera along a smooth orbiting path
-            if (cameraMode === 'flythrough' && sceneCenter && sceneRadius > 0) {
-                const t = (time - (flythroughStartTime || time)) * 0.0002; // slow orbit speed
-                const effectiveRadius = Math.min(sceneRadius, 4.0);
-                const fov = camera.fov * (Math.PI / 180);
-                const baseDistance = effectiveRadius / Math.tan(fov / 2);
-                const distance = baseDistance * 0.6;
+            if (cameraMode === 'flythrough' && sceneCenter && flyStartPos && flyMidPos && flyEndPos) {
+                const totalDuration = 12000; // 12 seconds for the whole shot
+                const elapsed = (time - (flythroughStartTime || time));
+                const t = Math.min(Math.max(elapsed / totalDuration, 0), 1); // clamp to [0,1]
 
-                // Simple orbit around the scene center, keeping the building in the middle of the screen
-                const angle = t * Math.PI * 2.0; // wrap naturally
+                let camPos;
+                if (t < 0.2) {
+                    // Hold the initial front-on wide shot
+                    camPos = flyStartPos.clone();
+                } else if (t < 0.6) {
+                    // Dolly in toward the facade
+                    const u = (t - 0.2) / 0.4;
+                    camPos = flyStartPos.clone().lerp(flyMidPos, u);
+                } else {
+                    // Sweep to the side for a three-quarter view
+                    const u = (t - 0.6) / 0.4;
+                    camPos = flyMidPos.clone().lerp(flyEndPos, u);
+                }
 
-                const x = sceneCenter.x + Math.cos(angle) * distance;
-                const z = sceneCenter.z + Math.sin(angle) * distance;
-                // Keep the camera at a modest height above the center so the model sits in the middle
-                const y = sceneCenter.y + distance * 0.25;
-
-                camera.position.set(x, y, z);
+                camera.position.copy(camPos);
                 camera.lookAt(sceneCenter);
                 controls.target.copy(sceneCenter);
             }
