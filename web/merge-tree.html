@@ -517,7 +517,7 @@
                     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
                     
                     const material = new THREE.PointsMaterial({
-                        size: 0.08,  // Increased from 0.025 for better visibility
+                        size: 0.12,  // Increased further for better visibility
                         vertexColors: true,
                         sizeAttenuation: true
                     });
@@ -581,7 +581,9 @@
 
             // Compute distance so the bounding sphere fits nicely in the view
             const fov = camera.fov * (Math.PI / 180);
-            const distance = (radius / Math.tan(fov / 2)) * 1.2; // 1.2 = small margin
+            const baseDistance = radius / Math.tan(fov / 2);
+            // Make the model appear much larger on screen by using a closer distance
+            const distance = baseDistance * 0.35; // was 1.2, now significantly closer
 
             let dir = camera.position.clone().sub(center);
             if (dir.lengthSq() === 0) {
@@ -595,8 +597,9 @@
             camera.updateProjectionMatrix();
 
             controls.target.copy(center);
-            controls.minDistance = distance * 0.3;
-            controls.maxDistance = distance * 3.0;
+            // Allow user to zoom in even more, and out quite a bit
+            controls.minDistance = distance * 0.1;
+            controls.maxDistance = distance * 6.0;
         }
 
         function createTimelineEvents() {
