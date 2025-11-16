@@ -451,9 +451,24 @@
             // Build tree view
             buildTreeView();
             
-            // Compute a robust center for all reconstructions
-            const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
-            const radius = center.distanceTo(globalMax) || 5;
+            // Compute a visual center and radius, preferring the final merged reconstruction
+            let center;
+            let radius;
+            if (reconstructions.has('merged')) {
+                const mergedRecon = reconstructions.get('merged');
+                if (mergedRecon && mergedRecon.pointCloud && mergedRecon.pointCloud.geometry) {
+                    const geom = mergedRecon.pointCloud.geometry;
+                    geom.computeBoundingSphere();
+                    const sphere = geom.boundingSphere;
+                    center = sphere.center.clone();
+                    radius = sphere.radius || 5;
+                }
+            }
+            // Fallback to global bounding box if merged is unavailable
+            if (!center || !isFinite(radius)) {
+                center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
+                radius = center.distanceTo(globalMax) || 5;
+            }
 
             // Center the ground grid underneath the reconstruction so it doesn't feel like it's floating.
             if (gridHelper) {
@@ -472,7 +487,7 @@
             }
 
             // After we have some reasonable camera orientation, refine zoom to fit
-            refineInitialCameraFraming(center, globalMin, globalMax);
+            refineInitialCameraFraming(center, radius);
 
             // Hide loading
             document.getElementById('loading').style.display = 'none';
@@ -578,13 +593,8 @@
         }
 
         // Refine the initial camera distance so the whole reconstruction fills the viewport
-        function refineInitialCameraFraming(center, globalMin, globalMax) {
-            if (!center || !globalMin || !globalMax) return;
-
-            const bbox = new THREE.Box3(globalMin.clone(), globalMax.clone());
-            const sphere = bbox.getBoundingSphere(new THREE.Sphere());
-            let radius = sphere.radius;
-            if (!isFinite(radius) || radius <= 0) return;
+        function refineInitialCameraFraming(center, radius) {
+            if (!center || !isFinite(radius) || radius <= 0) return;
 
             // Heuristic: ignore extremely far-out points when framing, so the main building fills the screen.
             // This caps the effective radius used for camera distance.
