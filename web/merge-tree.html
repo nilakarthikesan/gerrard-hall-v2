@@ -291,10 +291,10 @@
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf5f5f5);
             
-            // Camera setup - closer to front
+            // Camera setup (initial position will be refined after we know scene bounds)
             camera = new THREE.PerspectiveCamera(60, 
                 (window.innerWidth - 350) / window.innerHeight, 0.1, 1000);
-            camera.position.set(2, 1.5, 2);
+            camera.position.set(3, 2, 3);
             
             // Renderer setup
             const container = document.getElementById('canvas-container');
@@ -449,22 +449,23 @@
             // Build tree view
             buildTreeView();
             
+            // Compute a robust center for all reconstructions
+            const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
+            const radius = center.distanceTo(globalMax) || 5;
+            
             // Initialize viewing camera from an original camera pose if available
             try {
-                const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
-                const radius = center.distanceTo(globalMax) || 5;
-                // Prefer final merged, else fall back to ba_output
+                // Prefer final merged, else fall back to ba_output for COLMAP pose
                 const basePath = reconstructions.has('merged') ? 'merged' : 'ba_output';
-                await setInitialCameraFromColmap(`../data/gerrard-hall/results/${basePath}`, center, radius * 0.8);
-                controls.target.copy(center);
+                await setInitialCameraFromColmap(`../data/gerrard-hall/results/${basePath}`, center, radius);
             } catch (e) {
                 // Fallback: position camera diagonally above center
-                const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
-                const radius = center.distanceTo(globalMax) || 5;
-                camera.position.set(center.x + radius * 2.5, center.y + radius * 1.5, center.z + radius * 2.5);
+                camera.position.set(center.x + radius * 1.5, center.y + radius * 0.9, center.z + radius * 1.5);
                 camera.lookAt(center);
-                controls.target.copy(center);
             }
+
+            // After we have some reasonable camera orientation, refine zoom to fit
+            refineInitialCameraFraming(center, globalMin, globalMax);
 
             // Hide loading
             document.getElementById('loading').style.display = 'none';
@@ -562,11 +563,40 @@
                 // Camera center C = -R^T * t
                 const C = t.clone().applyMatrix3(Rt).multiplyScalar(-1);
                 const dir = center.clone().sub(C).normalize();
-                const camPos = C.clone().add(dir.multiplyScalar(radius * 1.5)); // Closer multiplier
+                const camPos = C.clone().add(dir.multiplyScalar(radius)); // let framing logic decide final distance
                 camera.position.copy(camPos);
                 camera.lookAt(center);
                 return;
             }
+        }
+
+        // Refine the initial camera distance so the whole reconstruction fills the viewport
+        function refineInitialCameraFraming(center, globalMin, globalMax) {
+            if (!center || !globalMin || !globalMax) return;
+
+            const bbox = new THREE.Box3(globalMin.clone(), globalMax.clone());
+            const sphere = bbox.getBoundingSphere(new THREE.Sphere());
+            const radius = sphere.radius;
+            if (!isFinite(radius) || radius <= 0) return;
+
+            // Compute distance so the bounding sphere fits nicely in the view
+            const fov = camera.fov * (Math.PI / 180);
+            const distance = (radius / Math.tan(fov / 2)) * 1.2; // 1.2 = small margin
+
+            let dir = camera.position.clone().sub(center);
+            if (dir.lengthSq() === 0) {
+                dir.set(1, 1, 1);
+            }
+            dir.normalize();
+
+            camera.position.copy(center.clone().add(dir.multiplyScalar(distance)));
+            camera.near = distance * 0.05;
+            camera.far = distance * 40;
+            camera.updateProjectionMatrix();
+
+            controls.target.copy(center);
+            controls.minDistance = distance * 0.3;
+            controls.maxDistance = distance * 3.0;
         }
 
         function createTimelineEvents() {
