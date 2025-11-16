@@ -19,30 +19,25 @@
         #container {
             width: 100vw;
             height: 100vh;
-            position: relative;
+            display: flex;
         }
+        /* Left merge-tree UI: keep it visible but slimmer so 3D view has more room */
         #tree-panel {
-            position: absolute;
-            top: 16px;
-            left: 16px;
             width: 230px;
-            max-height: 70vh;
             background: rgba(255, 255, 255, 0.96);
-            border: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
             overflow-y: auto;
             padding: 12px 14px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-            border-radius: 10px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
         }
         #canvas-container {
-            width: 100%;
-            height: 100%;
+            flex: 1;
             position: relative;
         }
         h1 {
             color: #4fc3f7;
-            font-size: 18px;
-            margin-bottom: 6px;
+            font-size: 20px;
+            margin-bottom: 8px;
             padding-bottom: 6px;
             border-bottom: 1px solid #4fc3f7;
         }
@@ -524,7 +519,7 @@
                     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
                     
                     const material = new THREE.PointsMaterial({
-                        size: 0.22,  // Increased further for better visibility
+                        size: 0.28,  // Increased again so individual points are clearly visible
                         vertexColors: true,
                         sizeAttenuation: true
                     });
@@ -588,13 +583,13 @@
 
             // Heuristic: ignore extremely far-out points when framing, so the main building fills the screen.
             // This caps the effective radius used for camera distance.
-            const effectiveRadius = Math.min(radius, 5.0);
+            const effectiveRadius = Math.min(radius, 4.0);
 
             // Compute distance so the effective bounding sphere fits nicely in the view
             const fov = camera.fov * (Math.PI / 180);
             const baseDistance = effectiveRadius / Math.tan(fov / 2);
             // Bring the model much closer so it occupies most of the viewport
-            const distance = baseDistance * 0.6;
+            const distance = baseDistance * 0.55;
 
             let dir = camera.position.clone().sub(center);
             if (dir.lengthSq() === 0) {
