@@ -287,6 +287,11 @@
         let currentEventIndex = 0;
         let isPlaying = false;
         let playInterval = null;
+        // Camera / flythrough state
+        let cameraMode = 'timeline'; // 'timeline' | 'flythrough'
+        let sceneCenter = null;
+        let sceneRadius = 0;
+        let flythroughStartTime = null;
 
         function init() {
             // Scene setup
@@ -469,6 +474,10 @@
                 center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
                 radius = center.distanceTo(globalMax) || 5;
             }
+
+            // Persist for later use (timeline + flythrough)
+            sceneCenter = center.clone();
+            sceneRadius = radius;
 
             // Center the ground grid underneath the reconstruction so it doesn't feel like it's floating.
             if (gridHelper) {
@@ -830,6 +839,7 @@
             const btn = document.getElementById('play-btn');
             
             if (isPlaying) {
+                cameraMode = 'timeline'; // ensure we are in timeline mode while playing
                 btn.textContent = '⏸ Pause';
                 playInterval = setInterval(() => {
                     if (currentEventIndex < mergeEvents.length - 1) {
@@ -837,7 +847,14 @@
                         document.getElementById('timeline-slider').value = currentEventIndex;
                         onTimelineChange({ target: { value: currentEventIndex } });
                     } else {
-                        togglePlay();
+                        // Reached final event: stop timeline playback and start cinematic flythrough
+                        isPlaying = false;
+                        btn.textContent = '▶ Play';
+                        if (playInterval) {
+                            clearInterval(playInterval);
+                            playInterval = null;
+                        }
+                        startFlythrough();
                     }
                 }, 1000);
             } else {
@@ -873,6 +890,7 @@
             });
             document.getElementById('timeline-slider').value = 0;
             applyEvent(0);
+            cameraMode = 'timeline';
         }
 
         function onWindowResize() {
@@ -881,8 +899,36 @@
             renderer.setSize(window.innerWidth - 350, window.innerHeight);
         }
 
-        function animate() {
+        function startFlythrough() {
+            if (!sceneCenter) return;
+            cameraMode = 'flythrough';
+            flythroughStartTime = performance.now();
+        }
+
+        function animate(time) {
             requestAnimationFrame(animate);
+
+            // If in cinematic flythrough mode, move camera along a smooth orbiting path
+            if (cameraMode === 'flythrough' && sceneCenter && sceneRadius > 0) {
+                const t = (time - (flythroughStartTime || time)) * 0.0002; // slow orbit speed
+                const effectiveRadius = Math.min(sceneRadius, 4.0);
+                const fov = camera.fov * (Math.PI / 180);
+                const baseDistance = effectiveRadius / Math.tan(fov / 2);
+                const distance = baseDistance * 0.6;
+
+                // Simple orbit around the scene center with slight up-and-down motion
+                const angle = t * Math.PI * 2.0; // wrap naturally
+                const height = distance * 0.3 * Math.sin(t * Math.PI); // gentle vertical variation
+
+                const x = sceneCenter.x + Math.cos(angle) * distance;
+                const z = sceneCenter.z + Math.sin(angle) * distance;
+                const y = sceneCenter.y + height;
+
+                camera.position.set(x, y, z);
+                camera.lookAt(sceneCenter);
+                controls.target.copy(sceneCenter);
+            }
+
             controls.update();
             renderer.render(scene, camera);
         }
