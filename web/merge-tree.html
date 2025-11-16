@@ -281,7 +281,7 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        let scene, camera, renderer, controls;
+        let scene, camera, renderer, controls, gridHelper;
         let reconstructions = new Map(); // path -> {pointCloud, points, visible, children, parent}
         let mergeEvents = []; // Timeline of show/hide events
         let currentEventIndex = 0;
@@ -313,8 +313,8 @@
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.5;
+            // Keep the grid and clusters visually stable by disabling auto-rotation.
+            controls.autoRotate = false;
             
             // Lighting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -325,7 +325,7 @@
             scene.add(directionalLight);
             
             // Grid - darker for white background
-            const gridHelper = new THREE.GridHelper(10, 10, 0x1a237e, 0xcccccc);
+            gridHelper = new THREE.GridHelper(10, 10, 0x1a237e, 0xcccccc);
             gridHelper.material.opacity = 0.3;
             gridHelper.material.transparent = true;
             scene.add(gridHelper);
@@ -454,6 +454,11 @@
             // Compute a robust center for all reconstructions
             const center = globalMin.clone().add(globalMax).multiplyScalar(0.5);
             const radius = center.distanceTo(globalMax) || 5;
+
+            // Center the ground grid underneath the reconstruction so it doesn't feel like it's floating.
+            if (gridHelper) {
+                gridHelper.position.set(center.x, 0, center.z);
+            }
             
             // Initialize viewing camera from an original camera pose if available
             try {
@@ -519,7 +524,7 @@
                     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
                     
                     const material = new THREE.PointsMaterial({
-                        size: 0.28,  // Increased again so individual points are clearly visible
+                        size: 0.32,  // Increase so clusters are clearly readable on screen
                         vertexColors: true,
                         sizeAttenuation: true
                     });
