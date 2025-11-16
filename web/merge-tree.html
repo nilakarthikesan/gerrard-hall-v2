@@ -538,12 +538,13 @@
                     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
                     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
                     
-                    // Use very large, screen-space-sized points so clusters are easy to see,
-                    // even on high-resolution displays.
+                    // Use large, screen-space-sized points so clusters are clearly visible.
+                    // In Three.js, with sizeAttenuation=false, `size` is in pixels.
+                    // 8px is dramatically larger than the default (~1px) and should read clearly.
                     const material = new THREE.PointsMaterial({
-                        size: 1.2,  // 4x larger than previous 0.32
+                        size: 8.0,  // large 8‑pixel points for high visibility
                         vertexColors: true,
-                        sizeAttenuation: false  // constant size in screen space
+                        sizeAttenuation: false  // keep constant size in screen space
                     });
                     
                     const pointCloud = new THREE.Points(geometry, material);
