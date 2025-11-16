@@ -916,13 +916,13 @@
                 const baseDistance = effectiveRadius / Math.tan(fov / 2);
                 const distance = baseDistance * 0.6;
 
-                // Simple orbit around the scene center with slight up-and-down motion
+                // Simple orbit around the scene center, keeping the building in the middle of the screen
                 const angle = t * Math.PI * 2.0; // wrap naturally
-                const height = distance * 0.3 * Math.sin(t * Math.PI); // gentle vertical variation
 
                 const x = sceneCenter.x + Math.cos(angle) * distance;
                 const z = sceneCenter.z + Math.sin(angle) * distance;
-                const y = sceneCenter.y + height;
+                // Keep the camera at a modest height above the center so the model sits in the middle
+                const y = sceneCenter.y + distance * 0.25;
 
                 camera.position.set(x, y, z);
                 camera.lookAt(sceneCenter);
