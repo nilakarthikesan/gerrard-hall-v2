@@ -13,8 +13,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            background: #000;
-            color: #fff;
+            background: #ffffff; /* white page background */
+            color: #000;         /* dark text for readability */
         }
         #container {
             width: 100vw;
@@ -32,18 +32,10 @@
             flex: 1;
             position: relative;
         }
-        h1 {
-            color: #4fc3f7;
-            font-size: 22px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #4fc3f7;
-        }
-        .tree-subtitle {
-            color: #90caf9;
-            font-size: 13px;
-            margin-bottom: 20px;
-            line-height: 1.5;
+        /* Hide the title + subtitle in the upper left to keep the UI minimal */
+        #tree-panel h1,
+        #tree-panel .tree-subtitle {
+            display: none;
         }
         .tree-node {
             margin: 8px 0;
@@ -276,6 +268,9 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
         let scene, camera, renderer, controls;
+        // Group containing all reconstruction point clouds so we can rotate
+        // the clusters together without changing camera framing.
+        let clusterGroup;
         let reconstructions = new Map(); // path -> {pointCloud, points, visible, children, parent}
         let mergeEvents = []; // Timeline of show/hide events
         let currentEventIndex = 0;
@@ -285,8 +280,18 @@
         function init() {
             // Scene setup
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a0a);
+            // White scene background to match the page and keep points readable
+            scene.background = new THREE.Color(0xffffff);
             
+            // Cluster group: holds all reconstruction point clouds so we can
+            // apply a single static rotation to make the hall upright without
+            // changing camera framing or scale.
+            clusterGroup = new THREE.Group();
+            // 180° flip around Z to turn the upside-down reconstruction right-side up.
+            // If this axis is slightly off, we can tweak just this rotation,
+            // leaving size and centering unchanged.
+            clusterGroup.rotation.z = Math.PI;
+            scene.add(clusterGroup);
             // Camera setup
             camera = new THREE.PerspectiveCamera(60, 
                 (window.innerWidth - 350) / window.innerHeight, 0.1, 1000);
@@ -482,7 +487,9 @@
                     
                     const pointCloud = new THREE.Points(geometry, material);
                     pointCloud.visible = false;
-                    scene.add(pointCloud);
+                    // Add all reconstructions to the shared clusterGroup so we can
+                    // rotate the clusters together around a fixed center.
+                    clusterGroup.add(pointCloud);
                     
                     reconstructions.set(path, {
                         pointCloud,
@@ -560,7 +567,8 @@
                 node.className = `tree-node tree-node-indent-${Math.min(depth, 4)}`;
                 node.dataset.path = path;
                 
-                const label = recon.type === 'merged' ? '🔗 merged' : '📦 ba_output';
+                // Use plain text labels (no emojis) for a cleaner left panel.
+                const label = recon.type === 'merged' ? 'merged' : 'ba_output';
                 node.innerHTML = `
                     ${name} ${label}
                     <span class="node-label">${recon.points.toLocaleString()} points</span>
@@ -705,8 +713,19 @@
             renderer.setSize(window.innerWidth - 350, window.innerHeight);
         }
 
-        function animate() {
+        // Spin the cluster group around the vertical axis while keeping the camera
+        // framing and scene center fixed. This gives a gentle 360° view of the hall.
+        function animate(time) {
             requestAnimationFrame(animate);
+
+            // time is in milliseconds; convert to seconds
+            const t = (time || 0) * 0.001;
+            // One full rotation every ~40 seconds (tune as desired)
+            const spinSpeed = (2 * Math.PI) / 40;
+            if (clusterGroup) {
+                clusterGroup.rotation.y = t * spinSpeed;
+            }
+
             controls.update();
             renderer.render(scene, camera);
         }
